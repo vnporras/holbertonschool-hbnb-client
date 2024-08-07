@@ -1,0 +1,38 @@
+[
+    {
+      "review_id": "review-1",
+      "place_id": "place-7",
+      "review_text": "Good Experience",
+      "rating": 4
+    },
+    {
+      "review_id": "review-2",
+      "place_id": "place-1",
+      "review_text": "Bad Experience",
+      "rating": 1
+    },
+    {
+      "review_id": "review-3",
+      "place_id": "place-1",
+      "review_text": "Medium Experience",
+      "rating": 3
+    },
+    {
+      "review_id": "review-4",
+      "place_id": "place-25",
+      "review_text": "Great Experience",
+      "rating": 5
+    },
+    {
+      "review_id": "review-5",
+      "place_id": "place-3",
+      "review_text": "Good Experience",
+      "rating": 4
+    },
+    {
+      "review_id": "review-6",
+      "place_id": "place-12",
+      "review_text": "Good Experience",
+      "rating": 4
+    }
+  ]
