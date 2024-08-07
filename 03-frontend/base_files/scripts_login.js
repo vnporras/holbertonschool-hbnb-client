@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const email = loginForm.elements['email'].value;
             const password = loginForm.elements['password'].value;
+
             try {
                 const response = await fetch('http://127.0.0.1:5000/login', {
                     method: 'POST',
@@ -20,6 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     const data = await response.json();
                     document.cookie = `token=${data.access_token}; path=/`;
                     window.location.href = 'index.html';
+                    console.log('Login Successfully');
+                    
                 } else {
                     alert('Login failed: ' + response.statusText);
                 }
