@@ -12,6 +12,7 @@ function checkAuthentication() {
     } else {
         addReviewSection.style.display = 'block';
         const placeId = getPlaceIdFromUrl();
+        console.log('Place ID:', placeId);
         fetchPlaceDetails(placeId);
     }
 }

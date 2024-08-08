@@ -1,8 +1,9 @@
 document.addEventListener('DOMContentLoaded', checkAuthentication);
+
 function checkAuthentication() {
     const token = getCookie('token');
     const loginLink = document.getElementById('login-link');
-    const countryFilter = document.getElementById('filter');
+    const countryFilter = document.getElementById('country-filter');
     const placeList = document.getElementById('places-list');
 
     if (!token) {
@@ -16,6 +17,7 @@ function checkAuthentication() {
         fetchPlaces(token);
     }
 }
+
 function getCookie(name) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
@@ -23,10 +25,9 @@ function getCookie(name) {
     return null;
 }
 
-
 async function fetchPlaces(token) {
     try {
-        const response = await fetch('http://127.0.0.1:5000/places', {
+        const response = await fetch('../mock-api/data/places.json', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -36,6 +37,12 @@ async function fetchPlaces(token) {
         if (response.ok) {
             const places = await response.json();
             displayPlaces(places);
+
+            document.getElementById('country-filter').addEventListener('change', function() {
+                const selectedCountry = this.value;
+                const filteredPlaces = places.filter(place => selectedCountry === 'all' || place.country_code === selectedCountry);
+                displayPlaces(filteredPlaces); 
+            });
         } else {
             console.error('Failed to fetch places data');
         }
@@ -62,18 +69,6 @@ function displayPlaces(places) {
     });
 }
 
-fetch('../mock-api/data/places.json')
-    .then(response => response.json())
-    .then(places => {
-        displayPlaces(places);
-
-        document.getElementById('country-filter').addEventListener('change', function() {
-            const selectedCountry = this.value;
-            const filteredPlaces = places.filter(place => selectedCountry === 'all' || place.country_code === selectedCountry);
-            displayPlaces(filteredPlaces); 
-        });
-    });
-
 fetch('../mock-api/data/countries.json')
     .then(response => response.json())
     .then(countries => {
@@ -90,4 +85,5 @@ fetch('../mock-api/data/countries.json')
             option.textContent = country.name;
             countryFilter.appendChild(option);
         });
-    }); 
+    })
+    .catch(error => console.error('Error fetching countries:', error));
