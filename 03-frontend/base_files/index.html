@@ -25,6 +25,7 @@
         <section id="filter">
             <label for="country-filter"><b>Filter by Country:</b></label>
             <select class="country-filter" id="country-filter">
+                <!-- Options will be dynamically added here -->
             </select>
         </section>
 
@@ -49,6 +50,49 @@
             <!--Places are displayed dynamically-->
         </section>
     </main>
+    <footer>
+        <p>All rights reserved © 2024</p>
+    </footer>
+    <script src="index_script.js"></script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inspiration for future trips</title>
+    <link rel="stylesheet" href="styles_home.css">
+</head>
+<body>
+
+    <header>
+        <img src="logo.png" class="logo" alt="Logo">
+        <a href="login.html" class="login-button" id="login-link">Login</a> 
+    </header>
+    
+    <nav>
+        <ul class="nav-links">
+            <li><a href="index.html" class="nav-link">Home</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <h1 class="title-future-trips">Inspiration for future trips</h1>
+        
+        <section id="filter">
+            <label for="country-filter"><b>Filter by Country:</b></label>
+            <select class="country-filter" id="country-filter">
+                <!-- Opciones de país se cargarán dinámicamente -->
+            </select>
+        </section>
+    
+        <section class="places-container" id="places-list">
+            <!-- Los lugares se mostrarán dinámicamente aquí -->
+        </section>
+    </main>
+    
+
     <footer>
         <p>All rights reserved © 2024</p>
     </footer>
