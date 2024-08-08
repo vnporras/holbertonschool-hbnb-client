@@ -2,11 +2,17 @@ document.addEventListener('DOMContentLoaded', checkAuthentication);
 function checkAuthentication() {
     const token = getCookie('token');
     const loginLink = document.getElementById('login-link');
+    const countryFilter = document.getElementById('filter');
+    const placeList = document.getElementById('places-list');
 
-    if (token) {
+    if (!token) {
         loginLink.style.display = 'block';
+        countryFilter.style.display = 'none';
+        placeList.style.display = 'none';
     } else {
         loginLink.style.display = 'none';
+        countryFilter.style.display = 'block';
+        placeList.style.display = 'block';
         fetchPlaces(token);
     }
 }

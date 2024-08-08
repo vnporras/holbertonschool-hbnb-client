@@ -1,20 +1,30 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const placeId = getPlaceIdFromUrl();
-    if (placeId) {
-        fetchPlaceDetails(placeId);
-    } else {
-        console.error('No placeId in the URL');
-    }
-});
-
 function getPlaceIdFromUrl() {
     const params = new URLSearchParams(window.location.search);
     return params.get('placeId');
 }
 
+function checkAuthentication() {
+    const token = getCookie('token');
+    const addReviewSection = document.getElementById('add-review');
+
+    if (!token) {
+        addReviewSection.style.display = 'none';
+    } else {
+        addReviewSection.style.display = 'block';
+        const placeId = getPlaceIdFromUrl();
+        fetchPlaceDetails(placeId);
+    }
+}
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
 async function fetchPlaceDetails(placeId) {
     try {
-        const response = await fetch('https://127.0.0.1:5000/places/${placeId}');
+        const response = await fetch('../mock-api/data/places.json');
 
         if (response.ok) {
             const places = await response.json();
@@ -33,32 +43,56 @@ async function fetchPlaceDetails(placeId) {
 }
 
 function displayPlaceDetails(place) {
-    console.log(place); // For debugging
+    console.log(place);
+    
+    const placeDetailsSection = document.querySelector('.info-card1');
+    placeDetailsSection.innerHTML = '';
 
-    const placeImage = document.getElementById('place-image');
+    const placeInfo = document.createElement('section');
+    placeInfo.className = 'card1';
+
+    const nameElement = document.createElement('h1');
+    nameElement.textContent = place.id;
+    placeInfo.appendChild(nameElement);
+
+    const hostElement = document.createElement('p');
+    hostElement.innerHTML = `<b>Host:</b> ${place.host_name}`;
+    placeInfo.appendChild(hostElement);
+
+    const priceElement = document.createElement('p');
+    priceElement.innerHTML = `<b>Price per night:</b> $${place.price_per_night}`;
+    placeInfo.appendChild(priceElement);
+
+    const locationElement = document.createElement('p');
+    locationElement.innerHTML = `<b>Location:</b> ${place.city_name}`;
+    placeInfo.appendChild(locationElement);
+
+
+    const descriptionElement = document.createElement('p');
+    descriptionElement.innerHTML = `<b>Description:</b> ${place.description}`;
+    placeInfo.appendChild(descriptionElement);
+
+    const amenitiesElement = document.createElement('p');
+    amenitiesElement.innerHTML = `<b>Amenities:</b> ${place.amenities.join(', ')}`;
+    placeInfo.appendChild(amenitiesElement);
+
+
     if (place.images && place.images.length > 0) {
-        placeImage.src = place.images[0]; // Use the first available image
-        placeImage.style.display = 'block';
-    } else {
-        placeImage.style.display = 'none';
+        const imagesContainer = document.createElement('div');
+        imagesContainer.className = 'place-images';
+        place.images.forEach(imageUrl => {
+            const img = document.createElement('img');
+            img.src = imageUrl;
+            img.alt = 'Place Image';
+            imagesContainer.appendChild(img);
+        });
+        placeInfo.appendChild(imagesContainer);
     }
 
-    document.getElementById('place-name').textContent = place.description;
-    document.getElementById('place-host').innerHTML = `<b>Host:</b> ${place.host_name}`;
-    document.getElementById('place-price').innerHTML = `<b>Price per night:</b> $${place.price_per_night}`;
-    document.getElementById('place-location').innerHTML = `<b>Location:</b> ${place.city_name}, ${place.country_name}`;
-    document.getElementById('place-description').innerHTML = `<b>Description:</b> ${place.description}`;
+    placeDetailsSection.appendChild(placeInfo);
 
-    const amenitiesList = document.getElementById('place-amenities');
-    amenitiesList.innerHTML = '';
-    place.amenities.forEach(amenity => {
-        const li = document.createElement('li');
-        li.textContent = amenity;
-        amenitiesList.appendChild(li);
-    });
-
-    const reviewsList = document.getElementById('reviews-list');
-    reviewsList.innerHTML = '<h2>Reviews</h2>';
+    const reviewsContainer = document.querySelector('.reviews');
+    reviewsContainer.innerHTML = '<h2>Reviews</h2>';
     place.reviews.forEach(review => {
         const reviewCard = document.createElement('section');
         reviewCard.className = 'review-card';
@@ -69,6 +103,16 @@ function displayPlaceDetails(place) {
                 <p><b>Rating</b> ${'★'.repeat(review.rating)}</p>
             </section>
         `;
-        reviewsList.appendChild(reviewCard);
+        
+        reviewsContainer.appendChild(reviewCard);
     });
+
+    const reviewButton = document.createElement('section');
+    reviewButton.className = 'submit-button'
+    reviewButton.innerHTML = `
+        <section>
+            <a href="add_review.html?placeId=${place.id}" class="button-reviews">Add review</a>
+        </section>
+    `;
+    reviewsContainer.appendChild(reviewButton);
 }
